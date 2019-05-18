@@ -1,9 +1,9 @@
 class DataModel:
     # Keys for the each col in the database
     sID = "id"
-    sDATE = "time_start"
+    sDATE = "date_start"
     sSTART = "time_start"
-    sEND = "end"
+    sEND = "time_end"
     sSESSION = "session"
     sSESSION_TITLE = "title"
     sLOCATION = "location"
@@ -11,15 +11,20 @@ class DataModel:
     sSPEAKERS = "speakers"
 
     def __init__(self, _id, date, start, end, session, session_title, location, description, speakers):
-        self.dbid = _id
-        self.date = date
-        self.start = start
-        self.end = end
-        self.session = session
-        self.session_title = session_title
-        self.location = location
-        self.description = description
-        self.speakers = speakers
+        self.data = {
+            self.sID: _id,
+            self.sDATE: date,
+            self.sSTART: start,
+            self.sEND: end,
+            self.sSESSION: session,
+            self.sSESSION_TITLE: session_title,
+            self.sLOCATION: location,
+            self.sDESCRIPTION: description,
+            self.sSPEAKERS: speakers
+        }
+
+
+
 
     def __str__(self):
         return "id: {}\n" \
@@ -30,7 +35,7 @@ class DataModel:
                "title: {}\n" \
                "location: {}\n" \
                "description: {}\n" \
-               "speakers: {}\n".format(self.dbid, self.date, self.start, self.end, self.session, self.session_title,
-                                     self.location, self.description, self.speakers)
+               "speakers: {}\n".format(self.data.sID, self.data.sDATE, self.data.sSTART, self.data.sEND, self.data.sSESSION, self.data.sSESSION_TITLE,
+                                     self.data.sLOCATION, self.data.sDESCRIPTION, self.data.sSPEAKERS)
 
 
