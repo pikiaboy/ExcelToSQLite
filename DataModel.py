@@ -1,11 +1,11 @@
 class DataModel:
     # Keys for the each col in the database
     sID = "id"
-    sDATE = "date"
-    sSTART = "start"
+    sDATE = "time_start"
+    sSTART = "time_start"
     sEND = "end"
     sSESSION = "session"
-    sSESSION_TITLE = "session_title"
+    sSESSION_TITLE = "title"
     sLOCATION = "location"
     sDESCRIPTION = "description"
     sSPEAKERS = "speakers"
@@ -24,10 +24,10 @@ class DataModel:
     def __str__(self):
         return "id: {}\n" \
                "date: {}\n" \
-               "start: {}\n" \
-               "end: {}\n" \
+               "time_start: {}\n" \
+               "time_end: {}\n" \
                "session: {}\n" \
-               "session_title: {}\n" \
+               "title: {}\n" \
                "location: {}\n" \
                "description: {}\n" \
                "speakers: {}\n".format(self.dbid, self.date, self.start, self.end, self.session, self.session_title,
