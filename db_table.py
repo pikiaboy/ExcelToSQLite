@@ -11,9 +11,38 @@ import sqlite3
 # If you need to change the schema of an already created table, reset the database
 # If you need to reset the database, just delete the database file (db_table.DB_NAME)
 #
+from DataModel import Session, Subsession, Speaker
+
+
 class db_table:
     # SQLite database filename
     DB_NAME = "interview_test.db"
+
+    session_object = Session.Session(None, None, None, None, None, None)
+    subsession_object = Subsession.Subsession(None, None)
+    speaker_object = Speaker.Speaker(None, None)
+
+    session_schema = {
+        session_object.sID: "integer PRIMARY KEY",
+        session_object.sDATE: "date",
+        session_object.sSTART: "datetime",
+        session_object.sEND: "datetime",
+        session_object.sSESSION_TITLE: "text",
+        session_object.sLOCATION: "text",
+        session_object.sDESCRIPTION: "text",
+    }
+
+    subsession_schema = {
+        subsession_object.sID: "integer PRIMARY KEY",
+        subsession_object.sPARENT_ID: "integer",
+        subsession_object.sCHILD_ID: "integer"
+    }
+
+    speaker_schema = {
+        speaker_object.sID: "integer PRIMARY KEY",
+        speaker_object.sNAME: "text",
+        speaker_object.sSESSION_ID: "integer"
+    }
 
     #
     # model initialization
@@ -25,16 +54,23 @@ class db_table:
     #
     # Example: table("users", { "id": "integer PRIMARY KEY", "name": "text" })
     #
-    def __init__(self, name, schema):
+    def __init__(self, name):
         # error handling
         if not name:
             raise RuntimeError("invalid table name")
-        if not schema:
-            raise RuntimeError("invalid database schema")
 
         # init fields and initiate database connection
         self.name = name
-        self.schema = schema
+
+        if name == "sessions":
+            self.schema = self.session_schema
+        elif name == "subsessions":
+            self.schema = self.subsession_schema
+        elif name == "speakers":
+            self.schema = self.speaker_schema
+        else:
+            raise RuntimeError("invalid table name")
+
         self.db_conn = sqlite3.connect(self.DB_NAME)
 
         # ensure the table is created
@@ -95,7 +131,7 @@ class db_table:
             result_row = {}
             # convert from (val1, val2, val3) to { col1: val1, col2: val2, col3: val3 }
             for i in range(0, len(columns)):
-                result_row[columns[i]] = row[i]
+                result_row[columns[i]] = str(row[i])
             result.append(result_row)
 
         return result
