@@ -11,36 +11,9 @@ bookName = sys.argv[1]
 book = xlrd.open_workbook(bookName)
 sh = book.sheet_by_index(0)
 
-# Objects used to insert into database
-session_object = Session.Session(None, None, None, None, None, None)
-subsession_object = Subsession.Subsession(None, None)
-speaker_object = Speaker.Speaker(None, None)
-
-session_schema = {
-    session_object.sID: "integer PRIMARY KEY",
-    session_object.sDATE: "date",
-    session_object.sSTART: "datetime",
-    session_object.sEND: "datetime",
-    session_object.sSESSION_TITLE: "text",
-    session_object.sLOCATION: "text",
-    session_object.sDESCRIPTION: "text",
-}
-
-subsession_schema = {
-    subsession_object.sID: "integer PRIMARY KEY",
-    subsession_object.sPARENT_ID: "integer",
-    subsession_object.sCHILD_ID: "integer"
-}
-
-speaker_schema = {
-    speaker_object.sID: "integer PRIMARY KEY",
-    speaker_object.sNAME: "text",
-    speaker_object.sSESSION_ID: "integer"
-}
-
-session_table = db_table.db_table("sessions", session_schema)
-subsession_table = db_table.db_table("subsessions", subsession_schema)
-speaker_table = db_table.db_table("speakers", speaker_schema)
+session_table = db_table.db_table("sessions")
+subsession_table = db_table.db_table("subsessions")
+speaker_table = db_table.db_table("speakers")
 
 # Parent id increments iff "session" == "Session"
 current_parent_id = 0
