@@ -19,7 +19,7 @@ speaker_table = db_table.db_table("speakers")
 current_parent_id = 0
 
 for rx in range(15, sh.nrows):
-    session_id = rx - 15
+    session_id = rx - 14
     date = str(sh.cell_value(rowx=rx, colx=0)).replace("'", "")
     start = str(sh.cell_value(rowx=rx, colx=1)).replace("'", "")
     end = str(sh.cell_value(rowx=rx, colx=2)).replace("'", "")
