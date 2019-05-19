@@ -1,5 +1,4 @@
 class Subsession:
-    sID = "id"
     sPARENT_ID = "parent_id"
     sCHILD_ID = "child_id"
 

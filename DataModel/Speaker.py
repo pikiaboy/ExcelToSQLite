@@ -1,6 +1,5 @@
 class Speaker:
-    sID = "id" # primary key
-    sNAME = "name" # Name of the speaker
+    sNAME = "speaker" # Name of the speaker
     sSESSION_ID = "session_id" # Session id that the speaker is talking at
 
     def __init__(self, name, session_id):

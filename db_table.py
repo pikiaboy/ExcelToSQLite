@@ -33,13 +33,11 @@ class db_table:
     }
 
     subsession_schema = {
-        subsession_object.sID: "integer PRIMARY KEY",
         subsession_object.sPARENT_ID: "integer",
         subsession_object.sCHILD_ID: "integer"
     }
 
     speaker_schema = {
-        speaker_object.sID: "integer PRIMARY KEY",
         speaker_object.sNAME: "text",
         speaker_object.sSESSION_ID: "integer"
     }
