@@ -1,6 +1,6 @@
 class Session:
     # Keys for the each col in the database
-    sID = "id"
+    sID = "session_id"
     sDATE = "date_start"
     sSTART = "time_start"
     sEND = "time_end"
@@ -28,4 +28,3 @@ class Session:
                "location: {}\n" \
                "description: {}\n".format(self.data.sDATE, self.data.sSTART, self.data.sEND, self.data.sSESSION_TITLE,
                                      self.data.sLOCATION, self.data.sDESCRIPTION)
-
