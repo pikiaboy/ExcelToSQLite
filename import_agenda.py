@@ -4,35 +4,49 @@ import sys
 import xlrd
 
 import db_table
-import DataModel
+from DataModel import Session, Subsession, Speaker
 
 bookName = sys.argv[1]
 
 book = xlrd.open_workbook(bookName)
-print("The number of worksheets is {0}".format(book.nsheets))
-print("Worksheet name(s): {0}".format(book.sheet_names()))
 sh = book.sheet_by_index(0)
 
-# print("{0} {1} {2}".format(sh.name, sh.nrows, sh.ncols))
-print("Cell D30 is {0}".format(sh.cell_value(rowx=29, colx=3)))
+# Objects used to insert into database
+session_object = Session.Session(None, None, None, None, None, None)
+subsession_object = Subsession.Subsession(None, None)
+speaker_object = Speaker.Speaker(None, None)
 
-dm = DataModel.DataModel(None, None, None, None, None, None, None, None, None)
-schema = {
-    dm.sID: "integer",
-    dm.sDATE: "date",
-    dm.sSTART: "datetime",
-    dm.sEND: "datetime",
-    dm.sSESSION: "text",
-    dm.sSESSION_TITLE: "text",
-    dm.sLOCATION: "text",
-    dm.sDESCRIPTION: "text",
-    dm.sSPEAKERS: "text"
+session_schema = {
+    session_object.sID: "integer PRIMARY KEY",
+    session_object.sDATE: "date",
+    session_object.sSTART: "datetime",
+    session_object.sEND: "datetime",
+    session_object.sSESSION_TITLE: "text",
+    session_object.sLOCATION: "text",
+    session_object.sDESCRIPTION: "text",
 }
 
-db_table = db_table.db_table("initial_table", schema)
+subsession_schema = {
+    subsession_object.sID: "integer PRIMARY KEY",
+    subsession_object.sPARENT_ID: "integer",
+    subsession_object.sCHILD_ID: "integer"
+}
+
+speaker_schema = {
+    speaker_object.sID: "integer PRIMARY KEY",
+    speaker_object.sNAME: "text",
+    speaker_object.sSESSION_ID: "integer"
+}
+
+session_table = db_table.db_table("sessions", session_schema)
+subsession_table = db_table.db_table("subsessions", subsession_schema)
+speaker_table = db_table.db_table("speakers", speaker_schema)
+
+# Parent id increments iff "session" == "Session"
+current_parent_id = 0
 
 for rx in range(15, sh.nrows):
-    db_id = rx - 15
+    session_id = rx - 15
     date = str(sh.cell_value(rowx=rx, colx=0)).replace("'", "")
     start = str(sh.cell_value(rowx=rx, colx=1)).replace("'", "")
     end = str(sh.cell_value(rowx=rx, colx=2)).replace("'", "")
@@ -42,9 +56,19 @@ for rx in range(15, sh.nrows):
     description = str(sh.cell_value(rowx=rx, colx=6)).replace("'", "")
     speakers = str(sh.cell_value(rowx=rx, colx=7)).replace("'", "")
 
-    newData = DataModel.DataModel(db_id, date, start, end, session, session_title, location, description, speakers)
+    # Parse Speakers into individual speakers and insert into table
+    if speakers != "":
+        speakers = speakers.split("; ")
+        for speaker in speakers:
+            speaker_object = Speaker.Speaker(speaker, session_id)
+            speaker_table.insert(speaker_object.data)
 
-    # print(sh.row(rx))
-    print(newData.data)
-    db_table.insert(newData.data)
-    print("\n")
+    if session == "Session":
+        session_object = Session.Session(date, start, end, session_title, location, description)
+        session_table.insert(session_object.data)
+        current_parent_id = session_id
+    elif session == "Sub":
+        session_object = Session.Session(date, start, end, session_title, location, description)
+        subsession_object = Subsession.Subsession(current_parent_id, session_id)
+        session_table.insert(session_object.data)
+        subsession_table.insert(subsession_object.data)
