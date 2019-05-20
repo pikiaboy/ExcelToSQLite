@@ -8,12 +8,12 @@ import db_table
 col = sys.argv[1].split(",")
 val = sys.argv[2].split(",")
 
-
 searchParms = {}
 
 for i in range(len(val)):
     searchParms[col[i]] = val[i]
 
+# Init the db connections
 session_table = db_table.db_table("sessions")
 subsession_table = db_table.db_table("subsessions")
 speaker_table = db_table.db_table("speakers")
@@ -21,6 +21,7 @@ speaker_table = db_table.db_table("speakers")
 # Find each session_id for the searched on column
 results = []
 if "speaker" in col:
+    # If we are searching for the speaker, use the speaker table instead of session.
     speakers = speaker_table.select(None, searchParms)
     for i in range(len(speakers)):
         session = session_table.select(None, {"session_id": speakers[i]['session_id']})[0]

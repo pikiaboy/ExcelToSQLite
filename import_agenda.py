@@ -11,6 +11,7 @@ bookName = sys.argv[1]
 book = xlrd.open_workbook(bookName)
 sh = book.sheet_by_index(0)
 
+# Tables that we are creating for the SQLite DB
 session_table = db_table.db_table("sessions")
 subsession_table = db_table.db_table("subsessions")
 speaker_table = db_table.db_table("speakers")

@@ -1,0 +1,7 @@
+xlrd
+sqlite3
+sys
+pprint
+
+
+Please pip install these before running. Tested in a venv from PyCharm with python interpreter 2.7
