@@ -105,7 +105,7 @@ class db_table:
     #         table.select()
     #         table.select(where={ "name": "John" })
     #
-    def select(self, columns=[], where={}):
+    def select(self, columns=[], where={}, subsessions=[]):
         # by default, query all columns
         if not columns:
             columns = [k for k in self.schema]
@@ -115,9 +115,15 @@ class db_table:
         query = "SELECT %s FROM %s" % (columns_query_string, self.name)
 
         # build where query string
+        where_query_string = ""
         if where:
             where_query_string = ["%s = '%s'" % (k, v) for k, v in where.iteritems()]
             query += " WHERE " + ' AND '.join(where_query_string)
+        elif subsessions:
+            for sub_session_id in subsessions:
+                where_query_string += "session_id = %s OR " % str(sub_session_id)
+            where_query_string = where_query_string[:-3]
+            query += " WHERE " + where_query_string
 
         result = []
         # SELECT id, name FROM users [ WHERE id=42 AND name=John ]

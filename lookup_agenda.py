@@ -35,13 +35,16 @@ for i in range(len(results)):
     session_id = result['session_id']
 
     subsessions = subsession_table.select(None, {"parent_id": session_id})
-    newResults = []
-    for j in range(len(subsessions)):
-        newResults.append(session_table.select(None, {"session_id": subsessions[j]['child_id']}))
+    subsessions_list = []
+    for row in subsessions:
+        subsessions_list.append(row['child_id'])
+
+    if len(subsessions_list) != 0:
+        newResults = session_table.select(None, None, subsessions_list)
 
     print("Parent Session:")
     pprint.pprint (result)
-    if len(newResults) != 0:
+    if len(subsessions_list) != 0:
         print("\nChild sessions")
         pprint.pprint(newResults)
 
