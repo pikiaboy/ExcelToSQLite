@@ -1,7 +1,7 @@
 class Session:
     # Keys for the each col in the database
     sID = "session_id"
-    sDATE = "date_start"
+    sDATE = "date"
     sSTART = "time_start"
     sEND = "time_end"
     sSESSION = "isSession"
